@@ -128,7 +128,7 @@ class RoleCenter extends Page
             $this->actions(
                 name: 'PurchaseDocumentTypes',
                 icon: 'list-ol',
-                caption: 'Types document achat',
+                caption: 'Types de documents achat',
                 onAction: function(){
                    Page::open(99);
                 },
