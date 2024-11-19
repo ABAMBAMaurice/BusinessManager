@@ -1,6 +1,6 @@
 <?php
 //Inclusion des fichiers
-
+ini_set('display_errors', '1');
 $new_classes = null;
 $declared_classes_before = get_declared_classes();
 
