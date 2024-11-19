@@ -3,7 +3,7 @@
     class purchaseLine extends table {
         public function __construct()
         {
-            parent::__construct('81', 'PurchaseLine');
+            parent::__construct('81', 'purchaseline');
 
             $this->field(1,'Line_No',FieldType::Integer(), editable: false);
             $this->field(2,'Document_No',FieldType::text(30), tableRelation: new purchaseHeader(), editable: false);

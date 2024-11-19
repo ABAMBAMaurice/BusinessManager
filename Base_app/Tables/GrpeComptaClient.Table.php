@@ -3,7 +3,7 @@
     class GrpeComptaClient extends Table{
         public function __construct()
         {
-            parent::__construct(2000006, 'GrpeComptaClient');
+            parent::__construct(2000006, 'grpecomptaclient');
 
             $this->field(1,'Code', FieldType::text(30), caption: 'Code');
             $this->field(2,'Compte_vente_client', FieldType::text(30), caption: 'Compte Vente client',tableRelation: new GLAccounts());
