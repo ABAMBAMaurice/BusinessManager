@@ -23,4 +23,5 @@ jobs:
           **/node_modules/**
           **/.idea/**
           **/Base_Meta/_metaDesigner/**
+          **/Base_Meta/Database/**
           
