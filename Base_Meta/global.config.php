@@ -18,6 +18,7 @@ if(isset($_POST['page'])) {
     $page ='';
 
 function Error($message){
+    header('updatable: true');
     die( '
         <div class="modal fade ErrModals" id="ErrModal" tabindex="-1" aria-labelledby="ErrModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -42,6 +43,7 @@ function Error($message){
     //exit();
 }
 function Message($message){
+    header('updatable: true');
 echo ' 
         <div class="modal fade alertModals" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -67,6 +69,8 @@ echo '
 
 
 function Confirm($message){
+    if(!isset(getallheaders()['updatable']))
+        header('updatable: true');
     if(isset($_POST['ConfirmAnswer'])){
         if($_POST['ConfirmAnswer'] == "true"){
             return true;
@@ -75,7 +79,7 @@ function Confirm($message){
         }
     }
     else {
-        echo '
+        $html = '
                 <div class="modal fade confimModals" id="confimModals" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -95,32 +99,107 @@ function Confirm($message){
                 </div>
             <script>
                 $("#confimModals").modal("show");  
-                $("#ConfirmOui").on("click", function(clickEvent){                
-                    $.ajax({
-                        url:"Base_app/app.main.php",
-                        type:"POST",
-                        data: {
-                            //record:record,
-                            PageID: "'.$_POST['PageID'].'",
-                            page: "'.$_POST['page'].'",
-                            PageActionName: "'.$_POST['PageActionName'].'",
-                            ConfirmAnswer:"true"
-                        },
-                        success: function (data) {
-                            if(data.length>0)
-                                updatePage(data);
-                        },
-                        error: function (err) {
-                            swal.fire({
-                                title: "Error",
-                                html: err,
-                                icon: "error"
+                ';
+                if(isset($_POST['PageID']) && isset($_POST['PageActionName'])) {
+                    $html .= '           
+                        $("#ConfirmOui").on("click", function(clickEvent){                
+                            $.ajax({
+                                url:"Base_app/app.main.php",
+                                type:"POST",
+                                data: {
+                                    //record:record,
+                                    PageID: "' . $_POST['PageID'] . '",
+                                    page: "' . $_POST['page'] . '",
+                                    PageActionName: "' . $_POST['PageActionName'] . '",
+                                    ConfirmAnswer:"true"
+                                },
+                                success: function (data, textStatus, xhr) {
+                                    if(data.length>0){
+                                        const updatable = xhr.getResponseHeader("updatable");
+                                        updatePage(data,updatable);
+                                    }
+                                },
+                                error: function (err) {
+                                    swal.fire({
+                                        title: "Error",
+                                        html: err,
+                                        icon: "error"
+                                    })
+                                }
                             })
-                        }
-                    })
-                });              
-            </script>
-        ';
+                        });              
+                    </script>
+                ';
+                }else if(isset($_POST['PageField']) && isset($_POST['tableId']) && isset($_POST['tableName']) && isset($_POST['pageFieldname']) && isset($_POST['groupeName'])){
+
+                    $html .= '           
+                        $("#ConfirmOui").on("click", function(clickEvent){                
+                            $.ajax({
+                                url:"Base_app/app.main.php",
+                                type:"POST",
+                                data: {
+                                    //record:record,
+                                    PageField: "' . $_POST['PageField'] . '",
+                                    page: "' . $_POST['page'] . '",
+                                    tableName: "' . $_POST['tableName'] . '",
+                                    pageFieldname:"' . $_POST['pageFieldname'] . '",
+                                    groupeName:"' . $_POST['groupeName'] . '",
+                                    tableId:"' . $_POST['tableId'] . '",
+                                    ConfirmAnswer:"true"
+                                },
+                                success: function (data, textStatus, xhr) {
+                                    if(data.length>0){
+                                        const updatable = xhr.getResponseHeader("updatable");
+                                        updatePage(data,updatable);
+                                    }
+                                },
+                                error: function (err) {
+                                    swal.fire({
+                                        title: "Error",
+                                        html: err,
+                                        icon: "error"
+                                    })
+                                }
+                            })
+                        });
+                        
+                                   
+                        $("#ConfirmNon").on("click", function(clickEvent){                
+                            $.ajax({
+                                url:"Base_app/app.main.php",
+                                type:"POST",
+                                data: {
+                                    //record:record,
+                                    PageField: "' . $_POST['PageField'] . '",
+                                    page: "' . $_POST['page'] . '",
+                                    tableName: "' . $_POST['tableName'] . '",
+                                    pageFieldname:"' . $_POST['pageFieldname'] . '",
+                                    groupeName:"' . $_POST['groupeName'] . '",
+                                    tableId:"' . $_POST['tableId'] . '",
+                                    ConfirmAnswer:"false"
+                                },
+                                success: function (data, textStatus, xhr) {
+                                    if(data.length>0){
+                                        const updatable = xhr.getResponseHeader("updatable");
+                                        updatePage(data,updatable);
+                                    }
+                                },
+                                error: function (err) {
+                                    swal.fire({
+                                        title: "Error",
+                                        html: err,
+                                        icon: "error"
+                                    })
+                                }
+                            })
+                        });                  
+                    </script>
+                ';
+                }
+
+
+
+        echo $html;
     }
 }
 

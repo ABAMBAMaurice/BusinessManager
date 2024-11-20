@@ -272,8 +272,10 @@
                     Table::$_records[$this->_id][$stringKey] = $this;
                     $modify = Database::base();
                     $modify->executeQuery($this->MySQL_UpdateQuery());
-                    if($modify->getError()[1] != 0)
-                        Error("Erreur SQL N°: ".$modify->getError()[1]."<br>Message: ".$modify->getError()[2]);
+                    if($modify->getError()[1] != 0) {
+                        header('updatable: true');
+                        Error("Erreur SQL N°: " . $modify->getError()[1] . "<br>Message: " . $modify->getError()[2]);
+                    }
 
                     return true;
                 } else {

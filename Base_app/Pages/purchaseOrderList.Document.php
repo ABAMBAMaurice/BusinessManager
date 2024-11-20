@@ -14,7 +14,7 @@
         function setActions(){
             $this->actions(name: 'NewOrder', icon: 'plus', caption: 'Nouvelle commande', onAction: function(){
                 Page::open(80);
-            }, style: 'sucess');
+            }, style: 'success');
         }
 
         function layout()

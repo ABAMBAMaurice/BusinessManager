@@ -39,14 +39,26 @@
                 onAction: function(){
                     Page::open(27);
                 },
-                style: 'info'
+                style: 'info text-light'
+            ) ;
+
+            $this->actions(
+                name:'createOrder',
+                icon:'file-document',
+                caption:'Créer une commande',
+                onAction: function(){
+                    if($this->rec->blocked->value == true)
+                        Message('Fournisseur bloqué. Impossible de créer une commande '.$this->rec->blocked);
+                },
+                style: 'secondary text-light'
             ) ;
         }
 
         function layout(){
             $this->group('Identification', 'Identification',
                 new PageField('No', source: $this->rec->No, editable: true, enabled: true, caption: 'N°'),
-                new PageField('vendor_Name', source: $this->rec->vendor_Name, editable: true, enabled: true, caption: 'Nom')
+                new PageField('vendor_Name', source: $this->rec->vendor_Name, editable: true, enabled: true, caption: 'Nom'),
+                new PageField('blocked', source: $this->rec->blocked, editable: true, enabled: true, caption: 'bloqué')
             );
             $this->group('Legal_info', 'Fiscalité',
                 new PageField('seller_register', source: $this->rec->seller_register, editable: true, enabled: true, caption: 'Registre de commerce'),
