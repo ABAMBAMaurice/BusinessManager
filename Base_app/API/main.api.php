@@ -28,7 +28,8 @@ if (isset($_POST['PageActionName']) && isset($_POST['PageID'])) {
         }
         if (isset(Page::$_pageCollection[$_POST['PageID']]->actions[$_POST['PageActionName']])) {
             Page::$_pageCollection[$_POST['PageID']]->actions[$_POST['PageActionName']]->onAction();
-            header('updatable: true');
+            if(!isset(getallheaders()['updatable']))
+                header('updatable: true');
         } else {
             Error("Mauvaise requête!");
         }
@@ -42,16 +43,28 @@ if (isset($_POST['PageField']) && isset($_POST['tableId'])
     && isset($_POST['tableName']) && isset($_POST['groupeName'])
     && isset($_POST['pageFieldname']) && isset($_POST['groupeName'])
 ) {
-
-    if(session_status() === PHP_SESSION_ACTIVE)
-        session_destroy();
-
     if(isset(Page::$_pageCollection[$_POST['page']])) {
         if (isset(Table::$_tableCollection[$_POST['tableName']])) {
             if(isset(Page::$_pageCollection[$_POST['page']]->groups[$_POST['groupeName']])) {
 
                 if(isset(Page::$_pageCollection[$_POST['page']]->groups[$_POST['groupeName']]->fields[$_POST['pageFieldname']])) {
-                    $recordData = $_POST['record'];
+
+                    $recordData = array();
+                    if(isset($_POST['record'])) {
+                        $recordData = $_POST['record'];
+                        $_SESSION['record'] = $recordData;
+                        $_SESSION['pageFieldname'] = $_POST['pageFieldname'];
+                    }else{
+                        if(isset($_SESSION['record'])) {
+                            if($_SESSION['pageFieldname'] == $_POST['pageFieldname']){
+                                $recordData = $_SESSION['record'];
+                            }
+                            if(session_status() === PHP_SESSION_ACTIVE)
+                                session_destroy();
+                        }
+                    }
+
+
                     Page::$_pageCollection[$_POST['page']]->rec->reset();{
                     foreach ($recordData as $Rdata)
                         if(!Page::$_pageCollection[$_POST['page']]->Validate($Rdata['name'], $Rdata['value'])){

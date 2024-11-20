@@ -270,7 +270,7 @@ class repeater
                                             ';
                                             }else{
                                                 $dhtml .= '
-                                                    $("#'.$rec->keys.$field->source->_name.'").click(function(){
+                                                    $("#'.$rec->keys.$field->source->_name.'").dblclick(function(){
                                                     document.body.style.cursor = "wait";
                                                         $.ajax({
                                                             type: "POST",

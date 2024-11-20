@@ -46,8 +46,10 @@
         {
             if($this->_onValidate != null) {
                 if (is_callable($this->_onValidate)) {
+                    if(!isset(getallheaders()['updatable']))
+                        header('updatable: true');
+
                     ($this->_onValidate)();
-                    header('updatable: true');
                 }
             }
         }

@@ -91,6 +91,10 @@
                 tableRelation: new GrpeComptaFournisseur(), caption: 'Grpe. Compta. Fournisseur'
             );
 
+            $this->field(19, 'blocked', FieldType::boolean(),
+                caption: 'Bloqué'
+            );
+
 
 
             $this->Keys('No');

@@ -165,7 +165,7 @@
     }
 
     public static function base(){
-       return  new Database('deb-tech.net', '3306', 'dkrh8539', 'X?KI[$@PRmgD','dkrh8539_demo');
+       return  new Database('localhost', '3306', 'root', '','BusinessManager');
     }
 }
 
